@@ -1,75 +1,41 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <title>Погода</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-      background: linear-gradient(to right, #83a4d4, #b6fbff);
-    }
-    #weather {
-      margin-top: 20px;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      display: inline-block;
-    }
-    button {
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Прогноз погоди</title>
 </head>
 <body>
-
-<h1>Перевірити погоду</h1>
+<h1>Дізнайтесь погоду</h1>
 <button onclick="getWeather()">Отримати погоду для Лондона</button>
-
 <div id="weather"></div>
 
 <script >
-  function getWeather() {
-    const city = "London";
-    const apiKey = "3f535d6d831cb9c35da7052db1867a3b"; // <-- Тут потрібно вставити свій API ключ!
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ua`;
+    function getWeather() {
+        const city = "London"; // Місто можна змінити
+        const apiKey = "3f535d6d831cb9c35da7052db1867a3b"; // Встав свій ключ сюди
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Помилка отримання даних");
-        }
-        return response.json();
-      })
-      .then(data => {
-        const temperature = data.main.temp;
-        const humidity = data.main.humidity;
-        const windSpeed = data.wind.speed;
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Помилка при отриманні даних");
+                return response.json();
+            })
+            .then(data => {
+                const temperature = data.main.temp;
+                const humidity = data.main.humidity;
+                const windSpeed = data.wind.speed;
 
-        document.getElementById("weather").innerHTML = `
-                <h2>Погода у ${city}</h2>
-                <p>Температура: ${temperature} °C</p>
-                <p>Вологість: ${humidity} %</p>
-                <p>Швидкість вітру: ${windSpeed} м/с</p>
-            `;
-      })
-      .catch(error => {
-        console.error("Сталася помилка:", error);
-        document.getElementById("weather").innerHTML = "Не вдалося отримати дані.";
-      });
-  }
+                document.getElementById("weather").innerHTML = `
+        <p>Температура: ${temperature}°C</p>
+        <p>Вологість: ${humidity}%</p>
+        <p>Швидкість вітру: ${windSpeed} м/с</p>
+      `;
+            })
+            .catch(error => {
+                document.getElementById("weather").innerText = `Сталася помилка: ${error.message}`;
+            });
+    }
+
 </script>
-
 </body>
 </html>
